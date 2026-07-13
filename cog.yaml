@@ -1,0 +1,11 @@
+build:
+  gpu: false
+  python_version: "3.12"
+  sdk_version: "0.21.0"
+  python_requirements: requirements-cog.txt
+  system_packages:
+    - build-essential
+  run:
+    - python -c "import hnswlib, numpy; print('RecallGuard extension ready', numpy.__version__)"
+run: "predict.py:Predictor"
+image: "ghcr.io/lee101/recall-guard-cog"

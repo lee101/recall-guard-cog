@@ -12,6 +12,8 @@ dist/
 var/
 venv/
 .venv/
+.cog/
+tmp/
 
 crc_runs/
 indexes/

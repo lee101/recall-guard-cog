@@ -1,0 +1,9 @@
+RecallGuard includes and modifies code from "HNSW with Accuracy Guarantees"
+(https://github.com/ming-afk/recall_certify_hnsw), released under Apache-2.0.
+
+The original HNSW implementation is by Yury Malkov and contributors. The CRC,
+LTT, and MBV research implementation is by Minghao Li, Raghav Mittal, Sanjivni
+Rana, Suraj Shetiya, Gautam Das, Nick Koudas, and contributors.
+
+App.nz additions: Cog packaging, safe exact-scan rectifier, synthetic demo,
+in-process index cache, tests, and deployment documentation.

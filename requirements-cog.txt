@@ -1,0 +1,2 @@
+numpy>=2.0,<3
+https://github.com/ming-afk/recall_certify_hnsw/archive/2dedffe4a4fc5ee10b661f4ec75652e493a820ff.tar.gz

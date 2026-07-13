@@ -1,4 +1,75 @@
-# HNSW with Accuracy Guarantees
+# RecallGuard Cog
+
+[![Deploy to app.nz](https://app.nz/deploy-button.svg)](https://app.nz/deploy?image=ghcr.io/lee101/recall-guard-cog:latest&name=recall-guard&hardware=cpu-auto&idleSeconds=45)
+
+A CPU-first, one-click deployment of the **Certify-then-Rectify** idea from
+[HNSW with Accuracy Guarantees Using Graph Spanners](https://arxiv.org/abs/2607.02338).
+It runs ordinary HNSW first, applies the paper's post-hoc conformal risk control
+(CRC) gate, and escalates rejected queries to an exact vectorized L2 scan.
+
+The result includes the chosen path, neighbors, squared-L2 distances, certificate
+threshold and score, calibrated risk bound, acceptance statistics, and timings.
+Enable `audit` to measure an accepted fast-path answer against exact retrieval.
+
+## Why the rectifier is exact scan by default
+
+The paper's faster MBV rectifier requires a dataset-specific empirical spanner
+stretch bound. A universal default would turn a probabilistic assumption into a
+misleading correctness claim. RecallGuard therefore uses the CRC gate unchanged
+and a conservative exact scan for escalations. The upstream MBV implementation
+remains in this repository for users who have calibrated a stretch bound.
+
+## Run
+
+```bash
+cog predict \
+  -i dataset_size=5000 \
+  -i dimensions=64 \
+  -i neighbors=10 \
+  -i ef_search=32 \
+  -i calibration_queries=200 \
+  -i audit=true
+```
+
+Or run the built container directly:
+
+```bash
+docker run -p 5000:5000 ghcr.io/lee101/recall-guard-cog:latest
+curl -s http://localhost:5000/predictions \
+  -H 'content-type: application/json' \
+  -d '{"input":{"dataset_size":5000,"dimensions":64,"audit":true}}'
+```
+
+Pass `vectors_json` as a JSON matrix and `query_json` as a JSON vector to use
+your own data. If omitted, the Cog creates a reproducible clustered benchmark
+with non-trivial HNSW cases. Inputs are bounded to five million scalar values so
+a public endpoint cannot accidentally allocate unbounded memory.
+
+## Inference work
+
+- C++ HNSW extension compiled with `-O3`, OpenMP, and native CPU instructions.
+- Contiguous `float32` storage and a squared-norm exact scan that avoids an
+  `N x D` difference allocation.
+- In-process LRU cache for three calibrated indexes, so repeat predictions skip
+  construction and calibration.
+- CPU-native Cog image; no CUDA or multi-gigabyte torch dependency.
+- 45-second app.nz idle window by default, then full scale-to-zero.
+
+## Validate
+
+```bash
+python -m pytest -q
+cog build -t recall-guard-cog:test
+```
+
+## Attribution and license
+
+Apache-2.0, following the upstream research implementation. See `NOTICE` for
+authors and app.nz modifications.
+
+---
+
+## Upstream research repository
 
 This repository contains the code for the paper experiments on CRC/LTT-based recall certification for HNSW.
 

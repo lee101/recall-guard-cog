@@ -1,0 +1,10 @@
+.git
+.github
+.venv
+__pycache__
+.pytest_cache
+*.pdf
+crc_runs
+indexes
+data
+hnswlib

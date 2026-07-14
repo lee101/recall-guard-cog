@@ -8,3 +8,7 @@ crc_runs
 indexes
 data
 hnswlib
+.cog
+build
+tmp
+*.egg-info

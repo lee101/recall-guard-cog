@@ -37,5 +37,6 @@ jobs:
         run: |
           sudo curl -sL -o /usr/local/bin/cog "https://github.com/replicate/cog/releases/latest/download/cog_$(uname -s)_$(uname -m)"
           sudo chmod +x /usr/local/bin/cog
-      - run: cog build -t ghcr.io/${GITHUB_REPOSITORY,,}:latest
+      - name: Build the slim release image
+        run: cog build --use-cog-base-image=false -t ghcr.io/${GITHUB_REPOSITORY,,}:latest
       - run: docker push ghcr.io/${GITHUB_REPOSITORY,,}:latest

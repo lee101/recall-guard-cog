@@ -53,6 +53,8 @@ a public endpoint cannot accidentally allocate unbounded memory.
 - In-process LRU cache for three calibrated indexes, so repeat predictions skip
   construction and calibration.
 - CPU-native Cog image; no CUDA or multi-gigabyte torch dependency.
+- Release CI uses Cog's slim Python base, cutting the image from about 2.07 GB
+  to 662 MB in the release check while preserving a reproducible source build.
 - 45-second app.nz idle window by default, then full scale-to-zero.
 
 ## Validate
